@@ -1,0 +1,79 @@
+<html>
+<head>
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.js"
+            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+            crossorigin="anonymous"></script>
+
+    <script type="application/javascript"
+            src="SharpMemoUI.js"
+    ></script>
+    <script type="application/javascript" >
+        $(function() {
+            var locationParts = document.location.href.split('#');
+            var tableId = locationParts[1].split('=')[1];
+            
+            SharpMemoUI.loadTable({
+                tableId: tableId,
+                guessArea: $('#guessArea'),
+                memoArea: $('#memoArea'),
+                playersArea: $('#playersArea'),
+                joinButtonArrea: $('#joinButtonArrea'),
+                
+                geometry: {
+                    width: 800,
+                    height: 600,
+                    columns: 6,
+                    rows: 5
+                }
+            });
+        });
+    </script>
+    <style>
+        #guessArea {
+            width: 800px;
+            height: 600px;
+            background-image: url("iphone_animals_icons.png");
+        }
+        
+        #memoArea {
+            width: 800px;
+            height: 125px;
+        }
+        
+        .memo-cell {
+            float: left;
+            width: 130px;
+            height: 120px;
+            
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 5px;
+            border-color: black;
+
+            background-image: url("iphone_animals_icons.png");
+            background-clip: border-box;
+            
+            opacity: 0.0;
+        } 
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <td><div id="guessArea">
+            </div></td>
+            <td><div id="playersArea">
+                PLAYERS
+            </div></td>
+        </tr>
+        <tr>
+            <td><div id="memoArea">
+            </div></td>
+            <td><div id="joinButtonArrea">
+                JOIN
+            </div></td>
+        </tr>
+    </table>
+</body>
+</html>
