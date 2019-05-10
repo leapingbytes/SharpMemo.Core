@@ -10,25 +10,38 @@ namespace SharpMemoServer.Persistence.InMemory
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(GameStateInMemoryRepository));
 
-        private static readonly string LoadTableStateSQL =
-            "SELECT Timestamp, TableId, Players, Memo, GuessPosition FROM event_store WHERE TableId = @TableId";
+        private readonly List<GameState> _repository;
 
-        private static readonly string ListTablesSQL = "SELECT TableId FROM event_store GROUP BY 1";
-
+        public GameStateInMemoryRepository()
+        {
+            _repository = new List<GameState>();
+        }
         
         public async Task<GameState> LoadTableState(Guid tableId)
         {
-            throw new NotImplementedException();
+            return _repository.Find((state => state.TableId.Equals(tableId)));
         }
 
         public async Task<List<Guid>> ListTables()
         {
-            throw new NotImplementedException();
+            var result = new List<Guid>();
+
+            _repository.ForEach(state =>
+            {
+                if (!result.Contains(state.TableId))
+                {
+                    result.Add(state.TableId);
+                }
+            });
+
+            return result;
         }
         
         public async Task<bool> WriteGameState(GameState state)
         {
-            throw new NotImplementedException();
+            _repository.Insert(0, state);
+
+            return true;
         }
 
         public async Task<bool> WaitForNewGameState(Guid tableId, DateTime knownTimeStamp)

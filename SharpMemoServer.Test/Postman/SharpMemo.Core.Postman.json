@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b4901120-d1ab-438b-a87d-88317f7c02cc",
+		"_postman_id": "9e648d36-2ce2-450d-a91a-5b2fbcf4f63f",
 		"name": "SharpMemo",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -100,10 +100,10 @@
 							"pm.test(\"Status code is 200-Ok\", function () { pm.response.to.have.status(200); });",
 							"pm.test(\"Payload as expected\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.TableId).to.eql(pm.globals.get(\"tableId\"));",
-							"    pm.expect(jsonData.Players).to.eql([]);",
-							"    pm.expect(jsonData.Memo).to.eql([]);",
-							"    pm.expect(jsonData.GuessPosition).to.eql(0);});"
+							"    pm.expect(jsonData.tableId).to.eql(pm.globals.get(\"tableId\"));",
+							"    pm.expect(jsonData.players).to.eql([]);",
+							"    pm.expect(jsonData.memo).to.eql([]);",
+							"    pm.expect(jsonData.guessPosition).to.eql(0);});"
 						],
 						"type": "text/javascript"
 					}
@@ -144,11 +144,11 @@
 							"pm.test(\"Status code is 200-Ok\", function () { pm.response.to.have.status(200); });",
 							"pm.test(\"Payload as expected\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.TableId).to.eql(pm.globals.get(\"tableId\"));",
-							"    pm.expect(jsonData.Players.length).to.eql(1);",
-							"    pm.expect(jsonData.Players[0].ScreenName).to.eql(\"someblock\");",
-							"    pm.expect(jsonData.Memo).to.eql([]);",
-							"    pm.expect(jsonData.GuessPosition).to.eql(0);",
+							"    pm.expect(jsonData.tableId).to.eql(pm.globals.get(\"tableId\"));",
+							"    pm.expect(jsonData.players.length).to.eql(1);",
+							"    pm.expect(jsonData.players[0].screenName).to.eql(\"someblock\");",
+							"    pm.expect(jsonData.memo).to.eql([]);",
+							"    pm.expect(jsonData.guessPosition).to.eql(0);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -157,7 +157,13 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n\t\"Player\" : {\n\t\t\"ScreenName\" : \"someblock\",\n\t\t\"SessionId\" : \"session-1\"\n\t}\n}"
@@ -191,11 +197,11 @@
 							"pm.test(\"Status code is 200-Ok\", function () { pm.response.to.have.status(200); });",
 							"pm.test(\"Payload as expected\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.TableId).to.eql(pm.globals.get(\"tableId\"));",
-							"    pm.expect(jsonData.Players.length).to.eql(1);",
-							"    pm.expect(jsonData.Players[0].ScreenName).to.eql(\"someblock\");",
-							"    pm.expect(jsonData.Memo).to.eql([]);",
-							"    pm.expect(jsonData.GuessPosition).to.eql(0);",
+							"    pm.expect(jsonData.tableId).to.eql(pm.globals.get(\"tableId\"));",
+							"    pm.expect(jsonData.players.length).to.eql(1);",
+							"    pm.expect(jsonData.players[0].screenName).to.eql(\"someblock\");",
+							"    pm.expect(jsonData.memo).to.eql([]);",
+							"    pm.expect(jsonData.guessPosition).to.eql(0);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -238,11 +244,11 @@
 							"pm.test(\"Payload as expected\", function () {",
 							"    var jsonData = pm.response.json();",
 							"    ",
-							"    pm.expect(jsonData.TableId).to.eql(pm.globals.get(\"tableId\"));",
-							"    pm.expect(jsonData.Players.length).to.eql(1);",
-							"    pm.expect(jsonData.Players[0].ScreenName).to.eql(\"someblock\");",
-							"    pm.expect(jsonData.Memo).to.eql([42]);",
-							"    pm.expect(jsonData.GuessPosition).to.eql(0);",
+							"    pm.expect(jsonData.tableId).to.eql(pm.globals.get(\"tableId\"));",
+							"    pm.expect(jsonData.players.length).to.eql(1);",
+							"    pm.expect(jsonData.players[0].screenName).to.eql(\"someblock\");",
+							"    pm.expect(jsonData.memo).to.eql([42]);",
+							"    pm.expect(jsonData.guessPosition).to.eql(0);",
 							"});",
 							""
 						],
@@ -252,7 +258,13 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n\t\"Player\" : {\n\t\t\"ScreenName\" : \"someblock\",\n\t\t\"SessionId\" : \"session-1\"\n\t},\n\t\"Guess\" : 42\n}"
@@ -270,6 +282,12 @@
 						"table",
 						"{{tableId}}",
 						"guess"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": ""
+						}
 					]
 				}
 			},
@@ -287,11 +305,11 @@
 							"pm.test(\"Payload as expected\", function () {",
 							"    var jsonData = pm.response.json();",
 							"    ",
-							"    pm.expect(jsonData.TableId).to.eql(pm.globals.get(\"tableId\"));",
-							"    pm.expect(jsonData.Players.length).to.eql(1);",
-							"    pm.expect(jsonData.Players[0].ScreenName).to.eql(\"someblock\");",
-							"    pm.expect(jsonData.Memo).to.eql([42]);",
-							"    pm.expect(jsonData.GuessPosition).to.eql(1);",
+							"    pm.expect(jsonData.tableId).to.eql(pm.globals.get(\"tableId\"));",
+							"    pm.expect(jsonData.players.length).to.eql(1);",
+							"    pm.expect(jsonData.players[0].screenName).to.eql(\"someblock\");",
+							"    pm.expect(jsonData.memo).to.eql([42]);",
+							"    pm.expect(jsonData.guessPosition).to.eql(1);",
 							"});",
 							""
 						],
@@ -301,7 +319,13 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n\t\"Player\" : {\n\t\t\"ScreenName\" : \"someblock\",\n\t\t\"SessionId\" : \"session-1\"\n\t},\n\t\"Guess\" : 42\n}"
@@ -336,11 +360,11 @@
 							"pm.test(\"Payload as expected\", function () {",
 							"    var jsonData = pm.response.json();",
 							"    ",
-							"    pm.expect(jsonData.TableId).to.eql(pm.globals.get(\"tableId\"));",
-							"    pm.expect(jsonData.Players.length).to.eql(1);",
-							"    pm.expect(jsonData.Players[0].ScreenName).to.eql(\"someblock\");",
-							"    pm.expect(jsonData.Memo).to.eql([42,13]);",
-							"    pm.expect(jsonData.GuessPosition).to.eql(0);",
+							"    pm.expect(jsonData.tableId).to.eql(pm.globals.get(\"tableId\"));",
+							"    pm.expect(jsonData.players.length).to.eql(1);",
+							"    pm.expect(jsonData.players[0].screenName).to.eql(\"someblock\");",
+							"    pm.expect(jsonData.memo).to.eql([42,13]);",
+							"    pm.expect(jsonData.guessPosition).to.eql(0);",
 							"});",
 							""
 						],
@@ -350,7 +374,13 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n\t\"Player\" : {\n\t\t\"ScreenName\" : \"someblock\",\n\t\t\"SessionId\" : \"session-1\"\n\t},\n\t\"Guess\" : 13\n}"
@@ -368,6 +398,13 @@
 						"table",
 						"{{tableId}}",
 						"guess"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
 					]
 				}
 			},
@@ -385,11 +422,11 @@
 							"pm.test(\"Payload as expected\", function () {",
 							"    var jsonData = pm.response.json();",
 							"    ",
-							"    pm.expect(jsonData.TableId).to.eql(pm.globals.get(\"tableId\"));",
-							"    pm.expect(jsonData.Players.length).to.eql(1);",
-							"    pm.expect(jsonData.Players[0].ScreenName).to.eql(\"someblock\");",
-							"    pm.expect(jsonData.Memo).to.eql([42,13]);",
-							"    pm.expect(jsonData.GuessPosition).to.eql(1);",
+							"    pm.expect(jsonData.tableId).to.eql(pm.globals.get(\"tableId\"));",
+							"    pm.expect(jsonData.players.length).to.eql(1);",
+							"    pm.expect(jsonData.players[0].screenName).to.eql(\"someblock\");",
+							"    pm.expect(jsonData.memo).to.eql([42,13]);",
+							"    pm.expect(jsonData.guessPosition).to.eql(1);",
 							"});",
 							""
 						],
@@ -399,7 +436,13 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n\t\"Player\" : {\n\t\t\"ScreenName\" : \"someblock\",\n\t\t\"SessionId\" : \"session-1\"\n\t},\n\t\"Guess\" : 42\n}"
@@ -434,11 +477,11 @@
 							"pm.test(\"Payload as expected\", function () {",
 							"    var jsonData = pm.response.json();",
 							"    ",
-							"    pm.expect(jsonData.TableId).to.eql(pm.globals.get(\"tableId\"));",
-							"    pm.expect(jsonData.Players.length).to.eql(1);",
-							"    pm.expect(jsonData.Players[0].ScreenName).to.eql(\"someblock\");",
-							"    pm.expect(jsonData.Memo).to.eql([42,13]);",
-							"    pm.expect(jsonData.GuessPosition).to.eql(2);",
+							"    pm.expect(jsonData.tableId).to.eql(pm.globals.get(\"tableId\"));",
+							"    pm.expect(jsonData.players.length).to.eql(1);",
+							"    pm.expect(jsonData.players[0].screenName).to.eql(\"someblock\");",
+							"    pm.expect(jsonData.memo).to.eql([42,13]);",
+							"    pm.expect(jsonData.guessPosition).to.eql(2);",
 							"});",
 							""
 						],
@@ -448,7 +491,13 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n\t\"Player\" : {\n\t\t\"ScreenName\" : \"someblock\",\n\t\t\"SessionId\" : \"session-1\"\n\t},\n\t\"Guess\" : 13\n}"
@@ -483,11 +532,11 @@
 							"pm.test(\"Payload as expected\", function () {",
 							"    var jsonData = pm.response.json();",
 							"    ",
-							"    pm.expect(jsonData.TableId).to.eql(pm.globals.get(\"tableId\"));",
-							"    pm.expect(jsonData.Players.length).to.eql(1);",
-							"    pm.expect(jsonData.Players[0].ScreenName).to.eql(\"someblock\");",
-							"    pm.expect(jsonData.Memo).to.eql([42,13,666]);",
-							"    pm.expect(jsonData.GuessPosition).to.eql(0);",
+							"    pm.expect(jsonData.tableId).to.eql(pm.globals.get(\"tableId\"));",
+							"    pm.expect(jsonData.players.length).to.eql(1);",
+							"    pm.expect(jsonData.players[0].screenName).to.eql(\"someblock\");",
+							"    pm.expect(jsonData.memo).to.eql([42,13,666]);",
+							"    pm.expect(jsonData.guessPosition).to.eql(0);",
 							"});",
 							""
 						],
@@ -497,7 +546,13 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n\t\"Player\" : {\n\t\t\"ScreenName\" : \"someblock\",\n\t\t\"SessionId\" : \"session-1\"\n\t},\n\t\"Guess\" : 666\n}"
@@ -515,6 +570,12 @@
 						"table",
 						"{{tableId}}",
 						"guess"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": ""
+						}
 					]
 				}
 			},
@@ -532,12 +593,12 @@
 							"pm.test(\"Payload as expected\", function () {",
 							"    var jsonData = pm.response.json();",
 							"    ",
-							"    pm.expect(jsonData.TableId).to.eql(pm.globals.get(\"tableId\"));",
-							"    pm.expect(jsonData.Players.length).to.eql(1);",
-							"    pm.expect(jsonData.Players[0].ScreenName).to.eql(\"someblock\");",
-							"    pm.expect(jsonData.Memo.length).to.eql(3);",
-							"    pm.expect(jsonData.Memo).to.eql([42,13,666]);",
-							"    pm.expect(jsonData.GuessPosition).to.eql(0);",
+							"    pm.expect(jsonData.tableId).to.eql(pm.globals.get(\"tableId\"));",
+							"    pm.expect(jsonData.players.length).to.eql(1);",
+							"    pm.expect(jsonData.players[0].screenName).to.eql(\"someblock\");",
+							"    pm.expect(jsonData.memo.length).to.eql(3);",
+							"    pm.expect(jsonData.memo).to.eql([42,13,666]);",
+							"    pm.expect(jsonData.guessPosition).to.eql(0);",
 							"});",
 							""
 						],

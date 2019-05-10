@@ -33,72 +33,28 @@ namespace SharpMemoServer.Rest
             return _queriesFacade.ListTables().Result;
         }
 
+        [HttpGet("table/{tableId}")]
+        public ActionResult<GameState> LoadTableState(string tableId)
+        {
+            return _queriesFacade.TableState(Guid.Parse(tableId)).Result;
+        }
 
-//        private void InitializeMonitoringApis()
-//        {
-//            _ctx.WebApi.OnGet("/sharp-memo/v1/ping", (req, res) => res.WriteAsTextAsync("pong\n"));
-//            _ctx.WebApi.OnGet("/{fileName}", async (req, res) =>
-//            {
-//                var fileName = req.PathParams["fileName"];
-//                RedHttpServerWebResponse redResponse = res as RedHttpServerWebResponse;
-//
-//
-//                await redResponse.response.SendFile("../SharpMemoUI.HTML/" + fileName);
-//                    
-//                Task.Run(() =>
-//                    {
-//                        redResponse.response.Closed = true;
-//                    });                    
-//            });
-//        }
-//        
-//        private void InitializeQueryApis()
-//        {
-//            _ctx.WebApi.OnGet("/sharp-memo/v1/tables", async (req, res) =>
-//            {
-//                await _queriesFacade.ListTables().ContinueWith( a => WriteAsJsonAsync(res, a.Result));
-//            });
-//            
-//            _ctx.WebApi.OnGet("/sharp-memo/v1/table/{tableId}/{timeStamp}", async (req, res) =>
-//            {
-//                Guid tableId = Guid.Parse(req.PathParams["tableId"]);
-//                long timeStamp = Int64.Parse(req.PathParams["timeStamp"]);
-//
-//                await _queriesFacade.NewTableState(tableId, DateTime.FromFileTimeUtc(timeStamp)).ContinueWith( a => WriteAsJsonAsync(res, a.Result));
-//            });
-//
-//            _ctx.WebApi.OnGet("/sharp-memo/v1/table/{tableId}", async (req, res) =>
-//            {
-//                Guid tableId = Guid.Parse(req.PathParams["tableId"]);
-//
-//                await _queriesFacade.TableState(tableId).ContinueWith( a => WriteAsJsonAsync(res, a.Result));
-//            });
-//        }
-//
-//        private void InitializeCommandApIs()
-//        {
-//            _ctx.WebApi.OnPost("/sharp-memo/v1/table/{tableId}/join", async (req, res) =>
-//            {
-//                Guid tableId = Guid.Parse(req.PathParams["tableId"]);
-//                var joinCommand = req.ParseAsJsonAsync<JoinCommand>();
-//                await joinCommand;
-//                await _commandFacade.Handle(tableId, joinCommand.Result).ContinueWith( a => WriteAsJsonAsync(res, a.Result));
-//            });
-//            _ctx.WebApi.OnPost("/sharp-memo/v1/table/{tableId}/guess", async (req, res) =>
-//            {
-//                Guid tableId = Guid.Parse(req.PathParams["tableId"]);
-//                var guessCommand = req.ParseAsJsonAsync<GuessCommand>();
-//                await guessCommand;
-//                await _commandFacade.Handle(tableId, guessCommand.Result).ContinueWith( a => WriteAsJsonAsync(res, a.Result));
-//            });
-//        }
-//
-//        private Task WriteAsJsonAsync(IHttpResponse response, object value)
-//        {
-//            RedHttpServerWebResponse redResponse = response as RedHttpServerWebResponse;
-//            
-//            redResponse.response.AddHeader("Access-Control-Allow-Origin", "*");
-//            return response.WriteAsJsonAsync(value);
-//        }
+        [HttpGet("table/{tableId}/{timeStamp}")]
+        public ActionResult<GameState> NewTableState(string tableId, long timeStamp)
+        {
+            return _queriesFacade.NewTableState(Guid.Parse(tableId), DateTime.FromFileTimeUtc(timeStamp)).Result;
+        }
+
+        [HttpPost("table/{tableId}/join")]
+        public ActionResult<GameState> Join(string tableId, [FromBody] JoinCommand joinCommand)
+        {
+            return _commandFacade.Handle(Guid.Parse(tableId), joinCommand).Result;
+        }
+
+        [HttpPost("table/{tableId}/guess")]
+        public ActionResult<GameState> Guess(string tableId, [FromBody] GuessCommand guessCommand)
+        {
+            return _commandFacade.Handle(Guid.Parse(tableId), guessCommand).Result;
+        }
     }
 }

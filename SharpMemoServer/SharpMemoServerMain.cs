@@ -25,6 +25,7 @@ namespace SharpMemoServer
             Log.Debug("Starting up");
 
             var persistence = new GameStateInMemoryRepository();
+            
             IGameStateReader reader = persistence;
             IGameStateWriter writer = persistence;
 
