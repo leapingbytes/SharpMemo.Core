@@ -40,9 +40,11 @@ namespace SharpMemoServer.Rest
         }
 
         [HttpGet("table/{tableId}/{timeStamp}")]
-        public ActionResult<GameState> NewTableState(string tableId, long timeStamp)
+        public ActionResult<GameState> NewTableState(string tableId, double timeStamp)
         {
-            return _queriesFacade.NewTableState(Guid.Parse(tableId), DateTime.FromFileTimeUtc(timeStamp)).Result;
+            var dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
+
+            return _queriesFacade.NewTableState(Guid.Parse(tableId), dateTime.AddMilliseconds(timeStamp)).Result;
         }
 
         [HttpPost("table/{tableId}/join")]

@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using MysticMind.PostgresEmbed;
 using Npgsql;
 using NpgsqlTypes;
 using SharpMemoServer.Domain;
-using SharpMemoServer.Persistence.InMemory;
 
 namespace SharpMemoServer.Persistence.PostgreSQL
 {
+    
     public class GameStatePostgreSQLRepository : IGameStateRepository
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(GameStatePostgreSQLRepository));
@@ -20,6 +21,8 @@ namespace SharpMemoServer.Persistence.PostgreSQL
         private static readonly string ListTablesSQL = "SELECT TableId FROM event_store GROUP BY 1";
 
         private readonly PgServer _server;
+
+        private readonly Object _semaphore = new Object();
         
         public GameStatePostgreSQLRepository()
         {
@@ -81,6 +84,8 @@ namespace SharpMemoServer.Persistence.PostgreSQL
                 var insertTask = insert.ExecuteNonQueryAsync();
                 
                 await insertTask;
+
+                Monitor.PulseAll(_semaphore);
 
                 return insertTask.IsCompleted;
             }

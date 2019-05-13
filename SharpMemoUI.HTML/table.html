@@ -1,5 +1,6 @@
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <script
             src="https://code.jquery.com/jquery-3.4.1.js"
             integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
@@ -30,7 +31,14 @@
         });
     </script>
     <style>
+        * {
+            font-family: Helvetica;
+        }
+        body {
+            background-color: #939393;
+        }
         #guessArea {
+            border-radius: 20px;
             width: 800px;
             height: 600px;
             background-image: url("iphone_animals_icons.png");
@@ -56,6 +64,29 @@
             
             opacity: 0.0;
         } 
+        
+        #playersArea {
+            display: block;
+            height: 595px;
+            padding-top: 5px;
+            padding-left: 10px;
+            font-size: 20px;
+            border-radius: 20px;
+            background-color: #f7f0e6;
+        }
+        
+        #playersArea div:first-child {
+            color: #b41947;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        #joinButtonArrea {
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 20px;
+            height: 120px;
+            background-color: #f7f0e6;
+        }
     </style>
 </head>
 <body>
@@ -63,16 +94,16 @@
         <tr>
             <td><div id="guessArea">
             </div></td>
-            <td><div id="playersArea">
+            <td valign="top" ><div id="playersArea">
                 PLAYERS
             </div></td>
         </tr>
         <tr>
             <td><div id="memoArea">
             </div></td>
-            <td><div id="joinButtonArrea">
+            <td><button id="joinButtonArrea">
                 JOIN
-            </div></td>
+            </button></td>
         </tr>
     </table>
 </body>

@@ -25,8 +25,12 @@ namespace SharpMemoServer.Domain
         public ImmutableList<int> Memo { get; }
         public int GuessPosition { get; }
 
+        public static DateTime Trim( DateTime date, long ticks) {
+            return new DateTime(date.Ticks - (date.Ticks % ticks), date.Kind);
+        }
+        
         private GameState(Guid tableId, ImmutableList<Player> players, ImmutableList<int> memo, int guessPosition) :
-            this(DateTime.Now, tableId, players, memo, guessPosition)
+            this(Trim(DateTime.UtcNow, TimeSpan.TicksPerMillisecond), tableId, players, memo, guessPosition)
         {
         }
 
@@ -62,7 +66,7 @@ namespace SharpMemoServer.Domain
 
             return Memo[GuessPosition] == guess
                 ? new GameState(TableId, Players, Memo, GuessPosition + 1)
-                : new GameState(TableId, otherPlayers, Memo, 0)
+                : new GameState(TableId, otherPlayers, otherPlayers.Count <= 1 ? ImmutableList.Create<int>() : Memo, 0)
                 ;
         }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using SharpMemoServer.Domain;
@@ -11,6 +12,8 @@ namespace SharpMemoServer.Persistence.InMemory
         private static readonly ILog Log = LogManager.GetLogger(typeof(GameStateInMemoryRepository));
 
         private readonly List<GameState> _repository;
+        
+        private readonly Object _semaphore = new Object();
 
         public GameStateInMemoryRepository()
         {
@@ -41,12 +44,30 @@ namespace SharpMemoServer.Persistence.InMemory
         {
             _repository.Insert(0, state);
 
+            lock (_semaphore)
+            {
+                Monitor.PulseAll(_semaphore);
+            }
+
+
             return true;
         }
 
         public async Task<bool> WaitForNewGameState(Guid tableId, DateTime knownTimeStamp)
         {
-            throw new NotImplementedException();
+            Task<GameState> loadTask = LoadTableState(tableId);
+            await loadTask;
+
+            if (loadTask.Result.Timestamp.CompareTo(knownTimeStamp) <= 0)
+            {
+                lock (_semaphore)
+                {
+                    Monitor.Wait(_semaphore);
+                }
+                
+            }
+
+            return true;
         }
     }
 }

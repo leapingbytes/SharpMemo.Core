@@ -68,9 +68,15 @@ namespace SharpMemoServer
             return _reader.LoadTableState(tableId);
         }
 
-        public Task<GameState> NewTableState(Guid tableId, DateTime knownStateTimeStamp)
+        public async Task<GameState> NewTableState(Guid tableId, DateTime knownStateTimeStamp)
         {
-            throw new NotImplementedException();
+            await _writer.WaitForNewGameState(tableId, knownStateTimeStamp);
+
+            var loadTask = _reader.LoadTableState(tableId);
+
+            await loadTask;
+
+            return loadTask.Result;
         }
     }
 }

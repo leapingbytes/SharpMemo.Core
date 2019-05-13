@@ -1,3 +1,35 @@
+RandomNames = [
+    "Nestor",
+    "Elvina",
+    "Maurine",
+    "Kaycee",
+    "Penni",
+    "Laticia",
+    "Brianne",
+    "Madelyn",
+    "Irene",
+    "Margy",
+    "Enrique",
+    "Shae",
+    "Avril",
+    "Bridgette",
+    "Carlena",
+    "Celestina",
+    "Elina",
+    "Trena",
+    "Alita",
+    "Annita",
+    "Dortha",
+    "Melissia",
+    "Nydia",
+    "Lucia",
+    "Darcie",
+    "Kimbra",
+    "Annette",
+    "Jolynn",
+    "Sylvester",
+    "Krystyna",
+];
 SharpMemoUI = {
     args: {},
     tableId: null,
@@ -5,18 +37,18 @@ SharpMemoUI = {
     tableState: {},
     
     mePlayer: {
-        ScreenName: "someblock",
-        SessionId: "my-session"
+        screenName: "someblock",
+        sessionId: "my-session"
     },
     
     index: 0,
     
     loadTables: function(destination) {
         $.ajax({
-            url: "http://localhost:8000/sharp-memo/v1/tables"
+            url: "/sharp-memo/v1/tables"
         })
             .done(function(data) {
-                let tables = JSON.parse(data);
+                let tables = data;
 
                 for(let i = 0; i < tables.length; i++) {
                     destination.append("<div><a href='table.html#tableId=" + tables[i] + "' >" + tables[i] + "</a></div>");
@@ -25,6 +57,10 @@ SharpMemoUI = {
     },
     
     loadTable: function(args) {
+        let randomNumber = Math.floor(Math.random() * RandomNames.length);
+        SharpMemoUI.mePlayer.screenName = RandomNames[ randomNumber ];
+        SharpMemoUI.mePlayer.sessionId = "session-" + randomNumber;
+        
         SharpMemoUI.args = args;
         SharpMemoUI.tableId = args.tableId;
         SharpMemoUI.geometry = args.geometry;
@@ -37,10 +73,11 @@ SharpMemoUI = {
     },
 
     setupJoinButtonArrea: function(args) {
+        args.joinButtonArrea.empty().append("Join as: " + SharpMemoUI.mePlayer.screenName);
         args.joinButtonArrea.click(() => {
             SharpMemoUI.joinTable();
         });
-    },
+    }, 
     
     setupGuessArea: function(args) {
         args.guessArea.click((a) => {
@@ -67,8 +104,17 @@ SharpMemoUI = {
     },
     
     nextGuess: function(args, guessId) {
-        SharpMemoUI.updateMemoCell(SharpMemoUI.index % SharpMemoUI.geometry.columns, guessId);
-        SharpMemoUI.index++;
+        // SharpMemoUI.updateMemoCell(SharpMemoUI.index % SharpMemoUI.geometry.columns, guessId);
+        // SharpMemoUI.index++;
+        $.ajax({
+            url: "/sharp-memo/v1/table/" + SharpMemoUI.tableId + "/guess",
+            type: "POST",
+            processData: false,
+            contentType: "application/json",
+            data: JSON.stringify({ player: SharpMemoUI.mePlayer, guess: guessId}),
+        }).done((data) => {
+            // SharpMemoUI.updateTableState(SharpMemoUI.args);
+        });
     },
     
     updateMemoCell: function(memoColumn, guessId) {
@@ -84,19 +130,28 @@ SharpMemoUI = {
 
     updateTableState: function(args) {
         args.state = SharpMemoUI.loadTableState(args.tableId, (state) => {
-            SharpMemoUI.updatePlayers(args, state);
-            SharpMemoUI.updateMemo(args, state);         
-        });
+            if (state.timestamp != SharpMemoUI.lastTimestamp) {
+                SharpMemoUI.lastTimestamp = state.timestamp;       
+                SharpMemoUI.updatePlayers(args, state);
+                SharpMemoUI.updateMemo(args, state);
+            }
+            if (SharpMemoUI.updateTimeoutId) {
+                window.clearTimeout(SharpMemoUI.updateTimeoutId)
+            }
+            SharpMemoUI.updateTimeoutId = window.setTimeout(() => {
+                SharpMemoUI.updateTableState(SharpMemoUI.args);
+            }, 100);
+        }, SharpMemoUI.tableState.timestamp );
     },
 
-    loadTableState: function(tableId, onDone) {
+    loadTableState: function(tableId, onDone, knownTimestamp) {
         $.ajax({
-            url: "http://localhost:8000/sharp-memo/v1/table/" + tableId
+            url: "/sharp-memo/v1/table/" + tableId + (knownTimestamp ? "/" + new Date(knownTimestamp).getTime() : "")
         })
             .done(function(data) {
-                SharpMemoUI.tableState = JSON.parse(data);
+                SharpMemoUI.tableState = data;
                 
-                console.log(SharpMemoUI.tableState);
+                // console.log(SharpMemoUI.tableState);
 
                 onDone(SharpMemoUI.tableState);
             });
@@ -104,23 +159,44 @@ SharpMemoUI = {
 
     updatePlayers: function (args, tableState)  {
         args.playersArea.empty();
-        for( let p in tableState.Players) {
-            args.playersArea.append("<div>" + p.ScreenName + " </div>");
+        for( let p in tableState.players) {
+            let player = tableState.players[p];
+            args.playersArea.append("<div>" + player.screenName + " </div>");
         }
     },
 
     updateMemo: function (args, tableState) {
+        let memo = tableState.memo;
+        let reset = tableState.guessPosition == 0;
+        let endPosition = reset ? memo.length : tableState.guessPosition;
+        let startPosition = Math.max(endPosition-6, 0);
         
+        let column = 0;
+        for( var position = startPosition; position < endPosition; position++) {
+            SharpMemoUI.updateMemoCell(column, memo[position]);
+            column++;
+        }
+        
+        if (reset) {
+            window.setTimeout(() => {
+                let column = 0;
+                while (column < 6) {
+                    $('#memo-'+column).css({ opacity: 0.0 });
+                    column++;
+                }
+            }, 1000);
+        }
     },
     
     joinTable: function() {
         $.ajax({
-            url: "http://localhost:8000/sharp-memo/v1/table/" + SharpMemoUI.tableId + "/join",
+            url: "/sharp-memo/v1/table/" + SharpMemoUI.tableId + "/join",
             type: "POST",
             processData: false,
-            contentType: "application/json"
+            contentType: "application/json",
+            data: JSON.stringify({ player: SharpMemoUI.mePlayer })
         }).done((data) => {
-            SharpMemoUI.updateTableState(SharpMemoUI.args);
+            // SharpMemoUI.updateTableState(SharpMemoUI.args);
         });
     }
 }
