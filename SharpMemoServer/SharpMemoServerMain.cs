@@ -29,8 +29,11 @@ namespace SharpMemoServer
             IGameStateReader reader = persistence;
             IGameStateWriter writer = persistence;
 
-            // Create a table
-            writer.WriteGameState(GameState.Empty());
+            // Create 5 tables
+            for (var t = 0; t < 5; t++)
+            {
+                writer.WriteGameState(GameState.Empty());
+            }
 
             var app = new SharpMemoServerApp(reader, writer);
             ICommandFacade commandFacade = app;

@@ -31,6 +31,8 @@ RandomNames = [
     "Krystyna",
 ];
 SharpMemoUI = {
+    mode: 'observer',
+    
     args: {},
     tableId: null,
     geometry: {},
@@ -55,8 +57,8 @@ SharpMemoUI = {
                 }
             });
     },
-    
-    loadTable: function(args) {
+
+    joinTable: function(args) {
         let randomNumber = Math.floor(Math.random() * RandomNames.length);
         SharpMemoUI.mePlayer.screenName = RandomNames[ randomNumber ];
         SharpMemoUI.mePlayer.sessionId = "session-" + randomNumber;
@@ -72,13 +74,35 @@ SharpMemoUI = {
         SharpMemoUI.updateTableState(args);
     },
 
+    doJoinTable: function() {
+        $.ajax({
+            url: "/sharp-memo/v1/table/" + SharpMemoUI.tableId + "/join",
+            type: "POST",
+            processData: false,
+            contentType: "application/json",
+            data: JSON.stringify({ player: SharpMemoUI.mePlayer })
+        }).done((data) => {
+            // do nothing
+        });
+    },
+
     setupJoinButtonArrea: function(args) {
         args.joinButtonArrea.empty().append("Join as: " + SharpMemoUI.mePlayer.screenName);
-        args.joinButtonArrea.click(() => {
-            SharpMemoUI.joinTable();
+        args.joinButtonArrea.click(() => { SharpMemoUI.doJoinTable(); });
+    },
+
+    doNextGuess: function(args, guessId) {
+        $.ajax({
+            url: "/sharp-memo/v1/table/" + SharpMemoUI.tableId + "/guess",
+            type: "POST",
+            processData: false,
+            contentType: "application/json",
+            data: JSON.stringify({ player: SharpMemoUI.mePlayer, guess: guessId}),
+        }).done((data) => {
+            // do nothing
         });
-    }, 
-    
+    },
+
     setupGuessArea: function(args) {
         args.guessArea.click((a) => {
             let guessAreaOffset = args.guessArea.offset();
@@ -91,7 +115,7 @@ SharpMemoUI = {
             
             console.log(row + "x" + column + " = " + nextGuess);
 
-            SharpMemoUI.nextGuess(args, nextGuess);
+            SharpMemoUI.doNextGuess(args, nextGuess);
         });
     },
     
@@ -103,38 +127,17 @@ SharpMemoUI = {
         }
     },
     
-    nextGuess: function(args, guessId) {
-        // SharpMemoUI.updateMemoCell(SharpMemoUI.index % SharpMemoUI.geometry.columns, guessId);
-        // SharpMemoUI.index++;
-        $.ajax({
-            url: "/sharp-memo/v1/table/" + SharpMemoUI.tableId + "/guess",
-            type: "POST",
-            processData: false,
-            contentType: "application/json",
-            data: JSON.stringify({ player: SharpMemoUI.mePlayer, guess: guessId}),
-        }).done((data) => {
-            // SharpMemoUI.updateTableState(SharpMemoUI.args);
-        });
-    },
-    
-    updateMemoCell: function(memoColumn, guessId) {
-        let row = Math.floor(guessId / SharpMemoUI.geometry.columns);
-        let column = guessId % SharpMemoUI.geometry.columns;
-        
-        $('#memo-'+memoColumn).css({
-            backgroundPositionX: (-Math.floor(SharpMemoUI.geometry.width / SharpMemoUI.geometry.columns) * column) + "px",
-            backgroundPositionY: (-Math.floor(SharpMemoUI.geometry.height / SharpMemoUI.geometry.rows) * row) + "px",
-            opacity: 1.0,
-        });
-    },
+    // =================================================================================================================
 
     updateTableState: function(args) {
-        args.state = SharpMemoUI.loadTableState(args.tableId, (state) => {
-            if (state.timestamp != SharpMemoUI.lastTimestamp) {
-                SharpMemoUI.lastTimestamp = state.timestamp;       
+        SharpMemoUI.loadTableState(args.tableId, (state) => {
+            if (state.timestamp != SharpMemoUI.tableState.timestamp) {
                 SharpMemoUI.updatePlayers(args, state);
                 SharpMemoUI.updateMemo(args, state);
+                SharpMemoUI.checkGameOver(args, state);
             }
+            SharpMemoUI.tableState = state;
+            
             if (SharpMemoUI.updateTimeoutId) {
                 window.clearTimeout(SharpMemoUI.updateTimeoutId)
             }
@@ -148,15 +151,11 @@ SharpMemoUI = {
         $.ajax({
             url: "/sharp-memo/v1/table/" + tableId + (knownTimestamp ? "/" + new Date(knownTimestamp).getTime() : "")
         })
-            .done(function(data) {
-                SharpMemoUI.tableState = data;
-                
-                // console.log(SharpMemoUI.tableState);
-
-                onDone(SharpMemoUI.tableState);
-            });
+            .done((state) => { onDone(state); });
     },
 
+    // =================================================================================================================
+    
     updatePlayers: function (args, tableState)  {
         args.playersArea.empty();
         for( let p in tableState.players) {
@@ -165,38 +164,67 @@ SharpMemoUI = {
         }
     },
 
+    displayGuess: function(memoColumn, guessId) {
+        let row = Math.floor(guessId / SharpMemoUI.geometry.columns);
+        let column = guessId % SharpMemoUI.geometry.columns;
+        
+        console.log( "displayGuess( " + memoColumn + ", " + guessId + ")");
+
+        $('#memo-'+memoColumn)
+            .removeClass("fadeOut")
+            .css({
+                backgroundPositionX: (-Math.floor(SharpMemoUI.geometry.width / SharpMemoUI.geometry.columns) * column) + "px",
+                backgroundPositionY: (-Math.floor(SharpMemoUI.geometry.height / SharpMemoUI.geometry.rows) * row) + "px",
+                opacity: 1.0,
+            });
+
+        window.setTimeout(() => {
+            $('#memo-'+memoColumn)
+                .addClass("fadeOut")
+                .css({
+                    opacity: 0.0
+                });
+        }, 500);
+    },
+    
     updateMemo: function (args, tableState) {
+        console.log("updateMemo(" + tableState.memo + ") - guessPosition = " + tableState.guessPosition);
+        
         let memo = tableState.memo;
-        let reset = tableState.guessPosition == 0;
+        let reset = (tableState.guessPosition == 0) && (memo.length > 0);
         let endPosition = reset ? memo.length : tableState.guessPosition;
-        let startPosition = Math.max(endPosition-6, 0);
+        let startPosition = Math.max(endPosition-SharpMemoUI.geometry.columns, 0);
         
         let column = 0;
         for( var position = startPosition; position < endPosition; position++) {
-            SharpMemoUI.updateMemoCell(column, memo[position]);
+            SharpMemoUI.displayGuess(column, memo[position]);
             column++;
         }
         
         if (reset) {
-            window.setTimeout(() => {
-                let column = 0;
-                while (column < 6) {
-                    $('#memo-'+column).css({ opacity: 0.0 });
-                    column++;
-                }
-            }, 1000);
+            $(document.body)
+                .addClass("flashGreen");
+        } 
+        else {
+            $(document.body)
+                .removeClass("flashRed")
+                .removeClass("flashGreen");
         }
     },
     
-    joinTable: function() {
-        $.ajax({
-            url: "/sharp-memo/v1/table/" + SharpMemoUI.tableId + "/join",
-            type: "POST",
-            processData: false,
-            contentType: "application/json",
-            data: JSON.stringify({ player: SharpMemoUI.mePlayer })
-        }).done((data) => {
-            // SharpMemoUI.updateTableState(SharpMemoUI.args);
-        });
+    checkGameOver: function (args, tableState) {
+        switch(SharpMemoUI.mode) {
+            case 'observer' : 
+                if (tableState.players.find( x => x.screenName == SharpMemoUI.mePlayer.screenName) != null ) {
+                    SharpMemoUI.mode = 'player';
+                }
+                break; 
+            case 'player' :
+                if (tableState.players.find( x => x.screenName == SharpMemoUI.mePlayer.screenName) == null ) {
+                    SharpMemoUI.mode = 'observer';
+                    $(document.body).addClass("flashRed");
+                }
+                break;
+        }
     }
 }

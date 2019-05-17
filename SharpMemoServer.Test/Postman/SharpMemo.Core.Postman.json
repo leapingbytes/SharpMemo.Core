@@ -57,7 +57,7 @@
 							"pm.test(\"Payload as expected\", function () {",
 							"    var jsonData = pm.response.json();",
 							"    ",
-							"    pm.expect(jsonData.length).to.eql(1);",
+							"    pm.expect(jsonData.length).to.eql(5);",
 							"",
 							"    pm.globals.set(\"tableId\", jsonData[0]);",
 							"});"
@@ -625,6 +625,65 @@
 						"v1",
 						"table",
 						"{{tableId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Guiess Wrong",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3db9e455-eece-4d37-b002-4e45ac670694",
+						"exec": [
+							"pm.test(\"Status code is 200-Ok\", function () { pm.response.to.have.status(200); });",
+							"pm.test(\"Payload as expected\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    ",
+							"    pm.expect(jsonData.tableId).to.eql(pm.globals.get(\"tableId\"));",
+							"    pm.expect(jsonData.players.length).to.eql(0);",
+							"    pm.expect(jsonData.guessPosition).to.eql(0);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Player\" : {\n\t\t\"ScreenName\" : \"someblock\",\n\t\t\"SessionId\" : \"session-1\"\n\t},\n\t\"Guess\" : 666\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/sharp-memo/v1/table/{{tableId}}/guess",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"sharp-memo",
+						"v1",
+						"table",
+						"{{tableId}}",
+						"guess"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": ""
+						}
 					]
 				}
 			},

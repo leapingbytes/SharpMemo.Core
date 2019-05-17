@@ -34,21 +34,28 @@ namespace SharpMemoServer
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            var staticContentRoot = System.Environment.GetEnvironmentVariable("STATIC_CONTENT_ROOT");
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                staticContentRoot = staticContentRoot == null ? "/Users/atchijov/Work/Spikes/SharpMemo.Core/SharpMemoUI.HTML" : staticContentRoot;
             }
             else
             {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+                if (staticContentRoot == null)
+                {
+                    throw new Exception("STATIC_CONTENT_ROOT not set");
+                }
             }
 
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(
-                    "/Users/atchijov/Work/Spikes/SharpMemo.Core/SharpMemoUI.HTML"),
+                FileProvider = new PhysicalFileProvider(staticContentRoot),
                 RequestPath = ""
             });
             
