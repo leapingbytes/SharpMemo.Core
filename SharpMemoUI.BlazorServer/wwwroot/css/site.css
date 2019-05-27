@@ -1,0 +1,95 @@
+* {
+    font-family: Helvetica;
+}
+body {
+    background-color: #939393;
+}
+#guessArea {
+    border-radius: 20px;
+    width: 800px;
+    height: 600px;
+    background-image: url("iphone_animals_icons.png");
+}
+
+#memoArea {
+    width: 800px;
+    height: 125px;
+}
+
+.memo-cell {
+    float: left;
+    width: 130px;
+    height: 120px;
+
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: black;
+
+    background-image: url("iphone_animals_icons.png");
+    background-clip: border-box;
+
+    opacity: 0.0;
+}
+
+#playersArea {
+    display: block;
+    height: 595px;
+    padding-top: 5px;
+    padding-left: 10px;
+    font-size: 20px;
+    border-radius: 20px;
+    background-color: #f7f0e6;
+}
+
+#playersArea div:first-child {
+    color: #b41947;
+    text-decoration: underline;
+    font-weight: bold;
+}
+#joinButtonArrea {
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 20px;
+    height: 120px;
+    background-color: #f7f0e6;
+}
+
+.fadeOut {
+    animation: fadeOut 2s;
+}
+
+.flashRed {
+    animation: flashBGRed 1s;
+}
+.flashGreen {
+    animation: flashBGGreen 1s;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1.0;
+    }
+    100% {
+        opacity: 0.0;
+    }
+}
+
+@keyframes flashBGRed {
+    0% {
+        background-color: red;
+    }
+    100% {
+        background-color: #939393;
+    }
+
+}
+@keyframes flashBGGreen {
+    0% {
+        background-color: green;
+    }
+    100% {
+        background-color: #939393;
+    }
+
+}

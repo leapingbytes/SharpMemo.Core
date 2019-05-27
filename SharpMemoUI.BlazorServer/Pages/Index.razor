@@ -1,0 +1,42 @@
+﻿@page "/"
+@using SharpMemoServer
+@inject SharpMemoServerApp ServerApp
+
+<h1>Sharp Memo(ry)</h1>
+<h2>Tables</h2>
+
+@if (tables == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Table ID</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var table in tables)
+        {
+            <tr>
+                <td>
+                <a href="/table/@table">
+                    @table
+                </a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@functions {
+    List<Guid> tables;
+
+    protected override async Task OnInitAsync()
+    {
+        tables = await ServerApp.ListTables();
+    }
+}

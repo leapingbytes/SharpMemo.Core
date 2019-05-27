@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpMemoServer", "SharpMem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpMemoServer.Test", "SharpMemoServer.Test\SharpMemoServer.Test.csproj", "{B2BAA611-DD50-4691-AD67-732C7816A7A8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpMemoUI.BlazorServer", "SharpMemoUI.BlazorServer\SharpMemoUI.BlazorServer.csproj", "{BFA26A40-A05B-41C4-98CF-641721409FC7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,5 +21,9 @@ Global
 		{B2BAA611-DD50-4691-AD67-732C7816A7A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2BAA611-DD50-4691-AD67-732C7816A7A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2BAA611-DD50-4691-AD67-732C7816A7A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFA26A40-A05B-41C4-98CF-641721409FC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFA26A40-A05B-41C4-98CF-641721409FC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFA26A40-A05B-41C4-98CF-641721409FC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFA26A40-A05B-41C4-98CF-641721409FC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

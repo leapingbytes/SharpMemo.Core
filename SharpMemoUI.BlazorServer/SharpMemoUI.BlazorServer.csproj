@@ -1,0 +1,100 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ResolveComReferenceCache Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.csproj.ResolveComReference.cache" />
+    <_ResolveComReferenceCache Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.csproj.ResolveComReference.cache" />
+    <_ResolveComReferenceCache Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.csproj.ResolveComReference.cache" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <IntermediateAssembly Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.dll" />
+    <IntermediateAssembly Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.dll" />
+    <IntermediateAssembly Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_DebugSymbolsIntermediatePath Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.pdb" />
+    <_DebugSymbolsIntermediatePath Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.pdb" />
+    <_DebugSymbolsIntermediatePath Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.pdb" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_DeploymentManifestEntryPoint Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.dll" />
+    <_DeploymentManifestEntryPoint Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.dll" />
+    <_DeploymentManifestEntryPoint Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ApplicationManifest Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.dll.manifest" />
+    <ApplicationManifest Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.dll.manifest" />
+    <ApplicationManifest Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.dll.manifest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DeployManifest Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.application" />
+    <DeployManifest Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.application" />
+    <DeployManifest Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.application" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClsidMap Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.clsidmap" />
+    <ClsidMap Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.clsidmap" />
+    <ClsidMap Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.clsidmap" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <RegFreeComManifest Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.X.manifest" />
+    <RegFreeComManifest Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.X.manifest" />
+    <RegFreeComManifest Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.X.manifest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <RazorIntermediateAssembly Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.Views.dll" />
+    <RazorIntermediateAssembly Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.Views.dll" />
+    <RazorIntermediateAssembly Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.Views.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_RazorDebugSymbolsIntermediatePath Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.Views.pdb" />
+    <_RazorDebugSymbolsIntermediatePath Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.Views.pdb" />
+    <_RazorDebugSymbolsIntermediatePath Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.Views.pdb" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckBuilt Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.Views.dll" />
+    <UpToDateCheckBuilt Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.Views.dll" />
+    <UpToDateCheckBuilt Remove="obj\Debug\netcoreapp3.0\SharpMemoUI.BlazorServer.Views.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_RazorComponentDeclarationAssembly Remove="obj\Debug\netcoreapp3.0\RazorDeclaration\SharpMemoUI.BlazorServer.dll" />
+    <_RazorComponentDeclarationAssembly Remove="obj\Debug\netcoreapp3.0\RazorDeclaration\SharpMemoUI.BlazorServer.dll" />
+    <_RazorComponentDeclarationAssembly Remove="obj\Debug\netcoreapp3.0\RazorDeclaration\SharpMemoUI.BlazorServer.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SharpMemoServer\SharpMemoServer.csproj" />
+  </ItemGroup>
+
+</Project>

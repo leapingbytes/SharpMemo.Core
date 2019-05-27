@@ -1,0 +1,32 @@
+@page "/table/{TableId}"
+@using Microsoft.AspNetCore.Components
+@using SharpMemoServer
+@inject SharpMemoServerApp ServerApp
+
+<table>
+    <tr>
+        <td><div id="guessArea">@TableId
+        </div></td>
+        <td valign="top" ><div id="playersArea">
+            PLAYERS
+        </div></td>
+    </tr>
+    <tr>
+        <td><div id="memoArea">
+        </div></td>
+        <td><button id="joinButtonArrea">
+            JOIN
+        </button></td>
+    </tr>
+</table>
+
+@functions {
+    [Parameter]
+    private string TableId { get; set; } 
+    
+    protected override async Task OnInitAsync()
+    {
+        // do something
+    }
+
+}
